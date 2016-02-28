@@ -1,0 +1,26 @@
+{
+  "name": "view-model",
+  "version": "1.0.0",
+  "description": "A simple ViewModel container based on top of an EventRouter",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --harmony",
+    "documentation": "cp preface.md README.md && mocha -R markdown --harmony >> README.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thurt/view-model.git"
+  },
+  "author": "thurt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thurt/view-model/issues"
+  },
+  "homepage": "https://github.com/thurt/view-model#readme",
+  "dependencies": {
+    "event-router": "git+https://git@github.com/thurt/event-router.git"
+  },
+  "devDependencies": {
+    "mocha": "^2.4.5"
+  }
+}
