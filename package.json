@@ -1,8 +1,8 @@
 {
   "name": "view-model",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A simple ViewModel container based on top of an EventRouter",
-  "main": "index.js",
+  "main": "ViewModel.js",
   "scripts": {
     "test": "mocha --harmony",
     "documentation": "cp preface.md README.md && mocha -R markdown --harmony >> README.md"
