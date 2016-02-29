@@ -1,6 +1,6 @@
 {
   "name": "view-model",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple ViewModel container based on top of an EventRouter",
   "main": "index.js",
   "scripts": {

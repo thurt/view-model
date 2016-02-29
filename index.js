@@ -58,14 +58,16 @@ module.exports = function ViewModel(shouldLogEvents) {
     for (let name in methods) {
       let method = methods[name]
       let boundMethod
-
+      if (typeof method !== 'function') {
+        results[name] = false
+        continue
+      }
       if (model.listeners.has(method)) {
         boundMethod = model.listeners.get(method)
       } else {
         boundMethod = method.bind(model.instance)
         model.listeners.set(method, boundMethod)
       }
-
       results[name] = R.add(key, name, boundMethod)
     }
 
@@ -79,6 +81,11 @@ module.exports = function ViewModel(shouldLogEvents) {
 
     for (let name in methods) {
       let method = methods[name]
+
+      if (typeof method !== 'function') {
+        results[name] = false
+        continue
+      }
       if (model.listeners.has(method)) {
         results[name] = R.remove(key, name, model.listeners.get(method))
       }
