@@ -1,6 +1,6 @@
 'use strict'
 const assert = require('assert')
-const ViewModel = require('../')
+const ViewModel = require('../ViewModel')
 const app = ViewModel()
 const emptyFn = function() {}
 
@@ -22,11 +22,11 @@ context('Instantiate', () => {
   })
   describe('ViewModel(shouldLogCalls)', () => {
     it('can set the underlying EventRouter to console log calls by instantiating with a truthy value', () => {
-      require('../')(true)
+      require('../ViewModel')(true)
       assert.strictEqual(consoleVal, 'EventRouter is logging calls')
     })
     it('can set the underlying EventRouter to NOT console log calls by instantiating with a falsey value', () => {
-      require('../')()
+      require('../ViewModel')()
       assert.strictEqual(consoleVal, null)
     })
   })
