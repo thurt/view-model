@@ -1,15 +1,14 @@
 'use strict'
-var assert = require('assert')
-global.ViewModel = require('view-model')
-global.app = ViewModel()
-global.emptyFn = function() {}
-/* global ViewModel, app, emptyFn */
+const assert = require('assert')
+const ViewModel = require('../')
+const app = ViewModel()
+const emptyFn = function() {}
 
 context('Instantiate', () => {
+  let consoleVal = null
+  let cache = console.info
+
   before('hijack console.info', () => {
-    /* global consoleVal, cache */
-    global.consoleVal = null
-    global.cache = console.info
     console.info = function(...args) {
       consoleVal = args.join(' ')
     }
@@ -23,13 +22,11 @@ context('Instantiate', () => {
   })
   describe('ViewModel(shouldLogCalls)', () => {
     it('can set the underlying EventRouter to console log calls by instantiating with a truthy value', () => {
-      const ViewModel = require('view-model')
-      const app = ViewModel(true)
+      require('../')(true)
       assert.strictEqual(consoleVal, 'EventRouter is logging calls')
-    }),
+    })
     it('can set the underlying EventRouter to NOT console log calls by instantiating with a falsey value', () => {
-      const ViewModel = require('view-model')
-      const app = ViewModel()
+      require('../')()
       assert.strictEqual(consoleVal, null)
     })
   })
@@ -57,7 +54,7 @@ context('Interface', () => {
           }
         })
         app.run('Test', function() {
-          var model_members = Object.keys(this)
+          const model_members = Object.keys(this)
           assert.strictEqual(model_members.includes('property'), true, 'the Test model includes property')
           assert.strictEqual(this.property, 'value', 'this.property equals "value"')
           assert.strictEqual(model_members.includes('getValue'), true, 'the Test model includes getValue')
@@ -110,7 +107,7 @@ context('Interface', () => {
     context('funcToRun', () => {
       it('binds to the model key, so all standard model members are available using this', () => {
         app.run('Test', function() {
-          var model_members = Object.keys(this)
+          const model_members = Object.keys(this)
           assert.strictEqual(model_members.length, 2, 'there are 2 standard model members')
 
           assert.deepStrictEqual(model_members.includes('name'), true, 'this.name exists')
@@ -120,7 +117,7 @@ context('Interface', () => {
 
       it('will not work when passing arrow function, since arrow disrupts bind', () => {
         app.run('Test', () => {
-          var model_members = Object.keys(this)
+          const model_members = Object.keys(this)
           assert.strictEqual(model_members.length, 0, 'an arrow function does not allow binding the standard model members')
         })
       })
@@ -191,13 +188,25 @@ context('Interface', () => {
       assert.strictEqual(app.destroy('DoesNotExist'), false)
     })
   })
+
+  describe('.getModelNames()', () => {
+    it('returns an array of model names as string', () => {
+      app.create('Test')
+      app.create('Test2')
+      app.create('Test3')
+      const modelNames = app.getModelNames()
+      assert.strictEqual(modelNames.includes('Test'), true)
+      assert.strictEqual(modelNames.includes('Test2'), true)
+      assert.strictEqual(modelNames.includes('Test3'), true)
+    })
+  })
 })
 
 context('Standard Model Members', () => {
   describe('this.name', () => {
     it('returns the name of the model as a string', () => {
       app.create('Test')
-      var outer_scope = null
+      let outer_scope = null
 
       app.run('Test', function() {
         outer_scope = 'I am running inside model ' + this.name
@@ -209,8 +218,8 @@ context('Standard Model Members', () => {
   describe('this.emit(name, data)', () => {
     it('emits data to all model listener methods registered under this name', () => {
       app.create('Test')
-      var test_data = [1, 2, 3]
-      var test_str = ''
+      const test_data = [1, 2, 3]
+      let test_str = ''
 
       /*
         Note: the three event listener methods are all named the same, however, they actually are different objects in memory
